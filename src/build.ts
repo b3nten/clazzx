@@ -13,15 +13,12 @@ await build({
   package: {
     // package.json properties
     name: "clazzx",
-    version: "0.0.1",
+    version: "0.0.2",
     description: "ClazzX is a small typesafe utility library for composing HTML classes.",
     license: "MIT",
     repository: {
       type: "git",
-      url: "git+https://github.com/username/repo.git",
-    },
-    bugs: {
-      url: "https://github.com/username/repo/issues",
+      url: "git+https://github.com/B3nten/clazzx",
     },
   },
   typeCheck: false,

@@ -14,12 +14,6 @@ interface StyleOptions {
 	additional?: Record<string | number, Clx>;
 }
 
-type Flatten<T extends object> =
-  { [K in keyof T]:
-    T[K] extends (Array<any> | string) ? (x: Record<K, T[K]>) => void :
-    T[K] extends object ? (x: Flatten<T[K]>) => void : never
-  }[keyof T] extends (x: infer I) => void ? { [K in keyof I]: I[K] } : never;
-
 type StyleProps<T> = {
 	[K in keyof Partial<
 			Omit<
@@ -36,7 +30,7 @@ type StyleProps<T> = {
 export class Style {
 	protected base: Clx = [];
 	protected compounds: Array<{
-		keys: Array<string>;
+		states: Array<string>;
 		classes: Clx;
 	}> = [];
 	protected default: Clx = [];
@@ -68,20 +62,9 @@ export class Style {
 					key !== "__before" &&
 					key !== "__after" &&
 					value === true
-					&& key in this
 				) {
 					//@ts-ignore
 					acc.set(key, clx(this[key]));
-					// if (key in this) {
-					// 	acc.set(key, clx(this[key as keyof Style]));
-					// } else {
-					// 	for (const [thiskey, thisvalue] of Object.entries(this)) {
-					// 		if (typeof thisvalue === "object" && key in thisvalue) {
-					// 			acc.delete(thiskey);
-					// 			acc.set(thiskey, clx(thisvalue[key as keyof Style]));
-					// 		}
-					// 	}
-					// }
 				}
 			}
 		}
@@ -93,7 +76,7 @@ export class Style {
 		// handle compounds
 		for (const [i, compound] of this.compounds.entries()) {
 			if (
-				compound.keys.every((key) => {
+				compound.states.every((state) => {
 					//@ts-ignore
 					if (key in this && input[key]) return true;
 				})
@@ -101,9 +84,7 @@ export class Style {
 				acc.set("compound" + i, clx(compound.classes));
 			}
 		}
-
 		acc.set("after", clx(this.__after));
-
 		return Array.from(acc.values()).join(" ").replace(/\B\s+|\s+\B/, "");
 	}
 }

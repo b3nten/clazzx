@@ -1,2 +1,2 @@
-export { Style } from "./src/Classe.ts";
-export { clx } from "./src/Classe.ts";
+export { Style } from "./src/clazzx.ts";
+export { clx } from "./src/clazzx.ts";

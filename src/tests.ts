@@ -25,3 +25,5 @@ assertEquals(
 	clx(myStyle.classes({ small: true, large: true })), 
 	"base text-sm text-lg"
 )
+
+

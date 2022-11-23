@@ -12,9 +12,9 @@ await build({
   },
   package: {
     // package.json properties
-    name: "classe",
+    name: "clazzx",
     version: "0.0.1",
-    description: "Your package.",
+    description: "ClazzX is a small typesafe utility library for composing HTML classes.",
     license: "MIT",
     repository: {
       type: "git",

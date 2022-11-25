@@ -30,7 +30,7 @@ className={myButton.classes({
 // Versus
 
 className={myButton({
-intent=isLoading ? "loading" 
+intent: isLoading ? "loading" 
 : isError ? "error" 
 : "primary"
 })}

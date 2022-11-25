@@ -54,7 +54,7 @@ yarn add 'clazzx'
 ```ts
 import { Style } from 'clazzx'
 
-const MyCustomStyle exends Style {
+const MyCustomStyle extends Style {
 	// the base class will always be applied
 	base = "border rounded-md font-sans"
 

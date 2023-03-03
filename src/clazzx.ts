@@ -1,4 +1,5 @@
-type Clx = string | Array<string | boolean>;
+type Clx = string | Array<string | boolean | undefined | null>;
+
 export const clx = (input: Clx) => {
 	if (Array.isArray(input)) {
 		return input.filter(Boolean).join(" ");
@@ -8,49 +9,36 @@ export const clx = (input: Clx) => {
 	return "";
 };
 
-interface StyleOptions {
-	before?: string | Array<string | boolean>;
-	after?: string | Array<string | boolean>;
-	additional?: Record<string | number, Clx>;
-}
-
-type StyleProps<T> = {
+export type StyleProps<T> = {
 	[K in keyof Partial<
-			Omit<
-				Omit<
-					Omit<Omit<Omit<Omit<T, "base">, "classes">, "compounds">, "default">,
-					"__before"
-				>,
-				"__after"
-			>
-	>]: boolean;
+		Omit<Omit<Omit<Omit<T, "base">, "classes">, "compounds">, "default">>]: boolean;
 };
 
-
-export class Style {
+export class Clazzx {
 	protected base: Clx = [];
 	protected compounds: Array<{
 		states: Array<string>;
 		classes: Clx;
 	}> = [];
 	protected default: Clx = [];
-	protected __before: Clx = [];
-	protected __after: Clx = [];
 
-	constructor(options?: StyleOptions) {
-		if (options?.before) {
-			this.__before = options.before;
-		}
-		if (options?.after) {
-			this.__after = options.after;
-		}
+	constructor(){
+		//@ts-ignore
+		return new Proxy(() => this, {
+			get(target, prop){
+				return target()[prop]
+			},
+			apply(target, _, args){
+				console.log(target())
+				return target().classes(args)
+			}
+		})
 	}
 
-	classes(input?: StyleProps<this>): string {
+	classes = (input?: StyleProps<this>): string => {
 		const acc = new Map();
 
 		acc.set("base", clx(this.base));
-		acc.set("before", clx(this.__before));
 
 		if (input) {
 			for (const [key, value] of Object.entries(input)) {
@@ -59,8 +47,6 @@ export class Style {
 					key !== "default" &&
 					key !== "compounds" &&
 					key !== "classes" &&
-					key !== "__before" &&
-					key !== "__after" &&
 					value === true
 				) {
 					//@ts-ignore
@@ -84,7 +70,6 @@ export class Style {
 				acc.set("compound" + i, clx(compound.classes));
 			}
 		}
-		acc.set("after", clx(this.__after));
 		return Array.from(acc.values()).join(" ").replace(/\B\s+|\s+\B/, "");
 	}
 }

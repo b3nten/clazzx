@@ -24,12 +24,13 @@ export class Clazzx {
 
 	constructor(){
 		//@ts-ignore
-		return new Proxy(() => this, {
+		const thisStore = this;
+		return new Proxy(() => thisStore, {
 			get(target, prop){
 				return target()[prop]
 			},
 			apply(target, _, args){
-				console.log(target())
+				console.log( thisStore)
 				return target().classes(args)
 			}
 		})

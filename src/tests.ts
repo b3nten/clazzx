@@ -15,9 +15,12 @@ class MyStyle extends Clazzx {
 }
 
 const myStyle = new MyStyle();
+console.log(myStyle())
 console.log(myStyle)
+console.log(myStyle.base)
+//console.log(myStyle)
 
-assertEquals(clx(myStyle(), "base"))
+//assertEquals(clx(myStyle(), "base"))
 // assertEquals(
 // 	clx(myStyle({ large: true })),
 // 	"base text-lg"

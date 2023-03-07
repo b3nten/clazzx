@@ -1,0 +1,9 @@
+[[language]]
+name = "javascript"
+language-server = { command = "deno", args = ["lsp"] }
+config = { enable = true }
+
+[[language]]
+name = "typescript"
+language-server = { command = "deno", args = ["lsp"] }
+config = { enable = true }

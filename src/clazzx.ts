@@ -9,37 +9,41 @@ export const clx = (input: Clx) => {
 	return "";
 };
 
-export type StyleProps<T> = {
-	[K in keyof Partial<
-		Omit<Omit<Omit<Omit<T, "base">, "classes">, "compounds">, "default">>]: boolean;
-};
+//  export type StyleProps<T> = {
+// [K in keyof Partial<
+// 	Omit<Omit<Omit<T, "classes">, "compounds">, "default">>]: boolean;
+// };
 
-export class Clazzx {
-	protected base: Clx = [];
-	protected compounds: Array<{
+export type StyleProps<T> = {
+	[K in keyof Partial<T>]: boolean
+}
+
+export class Clazzx<T extends Record<string, Clx> = Record<string, Clx>> {
+	public static clx = clx;
+	public readonly base: Clx = [];
+	public readonly compounds: Array<{
 		states: Array<string>;
 		classes: Clx;
 	}> = [];
-	protected default: Clx = [];
+	public readonly default: Clx = [];
 
-	constructor(){
-		//@ts-ignore
-		const thisStore = this;
-		return new Proxy(() => thisStore, {
-			get(target, prop){
-				return target()[prop]
-			},
-			apply(target, _, args){
-				console.log( thisStore)
-				return target().classes(args)
+	constructor(props?: T){
+		if(props){
+			for(const [key, val] of Object.entries(props)){
+				this[key] = val
 			}
-		})
+		}
 	}
 
-	classes = (input?: StyleProps<this>): string => {
+	public classes(input?: StyleProps<this & T>): string {
 		const acc = new Map();
-
-		acc.set("base", clx(this.base));
+		
+		
+		if(input && "base" in input && !input.base){
+			// not including base. Maybe do something here?
+		}else{
+			acc.set("base", clx(this.base))
+		}
 
 		if (input) {
 			for (const [key, value] of Object.entries(input)) {

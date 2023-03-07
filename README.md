@@ -19,7 +19,7 @@ className={MyButton.c({small: true, primary: true})}
 This simplifies the logic of tying the styling of a component to complex state. Instead of a series of nested ternary operators, simple logical operators can be used to clearly define the appropriate styles.
 
 ```ts
-className={MyButton.c({ 
+className={MyButton.compose({ 
 	primary: true,
 	loading: isLoading,
 	error: isError 
@@ -78,7 +78,7 @@ class Input extends ClazzX {
 }
 
 function MyCustomComponent(){
-	return <input className={Input.c({ md: true, secondary: true })}/>
+	return <input className={Input.compose({ md: true, secondary: true })}/>
 }
 ```
 ## Default Classes
@@ -98,7 +98,7 @@ compounds = [{
 ## Ordering
 Classes are applied in the order of the states.
 ```ts
-className={btn.classes({rounded: true, square: true})}
+className={btn.compose({rounded: true, square: true})}
 // className="border-md border-none"
 <Button primary secondary small medium>
 // className="bg-primary bg-secondary text-sm text-md"
@@ -155,7 +155,7 @@ interface Link {
 }
 
 function Link({children, ...props}: Link){
-	return <a {...props} className={LinkStyles.c({...props})}>{children}</a>
+	return <a {...props} className={LinkStyles.compose({...props})}>{children}</a>
 }
 
 function App(){

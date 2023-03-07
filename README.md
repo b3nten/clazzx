@@ -19,21 +19,25 @@ className={MyButton.compose({small: true, primary: true})}
 This simplifies the logic of tying the styling of a component to complex state. Instead of a series of nested ternary operators, simple logical operators can be used to clearly define the appropriate styles.
 
 ```ts
-className={MyButton.compose({ 
-	primary: true,
-	loading: isLoading,
-	error: isError 
-})}
+className={
+	MyButton.compose({ 
+		primary: true,
+		loading: isLoading,
+		error: isError 
+	})
+}
 //AND
 <Button primary loading={isLoading} error={isError}>
 
 // Versus the traditional variant approach
 
-className={myButton({
-intent: isLoading ? "loading" 
-: isError ? "error" 
-: "primary"
-})}
+className={
+	myButton({
+		intent: isLoading ? "loading" 
+			: isError ? "error" 
+			: "primary"
+	})
+}
 // AND
 <Button intent={isLoading ? "loading" : isError ? "error" : "primary"}>
 ```

@@ -1,30 +1,30 @@
 import { assertEquals } from "https://deno.land/std@0.162.0/testing/asserts.ts";
-import { Clazzx, clx } from "../mod.ts";
+import { clx, Clazzx } from "../mod.ts";
 
-// assertEquals(clx("text-3xl font-bold"), "text-3xl font-bold");
-// assertEquals(clx(["text-3xl", "font-bold"]), "text-3xl font-bold");
-// //@ts-expect-error: testing....
-// assertEquals(clx({}), "");
-// //@ts-expect-error: testing....
-// assertEquals(clx(), "");
+assertEquals(clx("text-3xl font-bold"), "text-3xl font-bold");
+assertEquals(clx(["text-3xl", "font-bold"]), "text-3xl font-bold");
+assertEquals(clx(["text-3xl", undefined, null]), "text-3xl");
 
-// class MyStyle extends Clazzx {
-// 	base = "base";
-// 	small = "text-sm";
-// 	medium = "text-md";
-// 	large = "text-lg";
-// }
-// const myStyle = new MyStyle();
-// // console.log(myStyle.classes({medium: true}))
+assertEquals(clx("text-3xl", "font-bold"), "text-3xl font-bold");
+assertEquals(clx("text-3xl", undefined, null), "text-3xl");
+assertEquals(clx(["text-3xl"], ["font-bold"]), "text-3xl font-bold");
 
-// const btn = new Clazzx({
-// 	lol: 'ok',
-// 	base: "this is sick",
-// 	omg: ["lol"]
-// })
-// btn.classes({omg: true, base: false})
-
-const lol = {
-	base: "base",
-	get small(){return "text-sm" + this.base}, 
+class Btn extends Clazzx {
+	base = "text-3xl font-bold";
+	small = "text-sm";
 }
+
+console.log("btn", Btn.c({ }));
+
+class Input extends Btn {
+	base = "text-3xl font-bold";
+	error = "text-red-500"
+	compounds = [
+		{
+			states: ["small", "error"],
+			classes: "hover:bg-red-200",
+		},
+	]
+}
+
+console.log("input", Input.c({ small: true, error: true }));

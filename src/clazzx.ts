@@ -1,45 +1,67 @@
-type Clx = string | Array<string | boolean | undefined | null>;
+type Clx =
+	| string
+	| boolean
+	| undefined
+	| null
+	| Array<string | boolean | undefined | null>;
 
-export const clx = (input: Clx) => {
-	if (Array.isArray(input)) {
-		return input.filter(Boolean).join(" ");
-	} else if (typeof input === "string") {
-		return input.trim();
+export const clx = (...input: Array<Clx>): string => {
+	if (input.length === 1) {
+		if (Array.isArray(input[0])) {
+			return clx(...input[0]);
+		} else if (typeof input[0] === "string") {
+			return input[0];
+		}
 	}
-	return "";
+	const acc: string[] = [];
+	for (const item of input) {
+		if (Array.isArray(item)) {
+			acc.push(clx(...item));
+		} else if (typeof item === "string") {
+			acc.push(item);
+		}
+	}
+	let str = "";
+	for (let i = 0; i < acc.length; i++) {
+		if (acc[i]) {
+			str += acc[i] + (i < acc.length - 1 ? " " : "");
+		}
+	}
+	return str;
 };
 
- export type StyleProps<T> = {
-[K in keyof Partial<
-	Omit<Omit<Omit<T, "classes">, "compounds">, "default">>]: boolean;
+export type StyleProps<T> = {
+	[K in keyof Partial<
+		Omit<Omit<Omit<T, "classes">, "compounds">, "default">
+	>]: boolean;
 };
 
-export class Clazzx<T extends Record<string, Clx> = Record<string, Clx>> {
+type ClazzxProps =
+	| {
+			compounds?: Clazzx["compounds"];
+			base?: Clazzx["base"];
+			default?: Clazzx["default"];
+	  }
+	| Record<string, Clx>;
+
+export class Clazzx {
 	public static clx = clx;
-	public readonly base: Clx = [];
-	public readonly compounds: Array<{
+
+	public base: Clx = []
+	public default: Clx = [];
+
+	public compounds: Array<{
 		states: Array<string>;
 		classes: Clx;
 	}> = [];
-	public readonly default: Clx = [];
 
-	constructor(props?: T){
-		if(props){
-			for(const [key, val] of Object.entries(props)){
-				//@ts-expect-error this is fine
-				this[key] = val
-			}
-		}
-	}
-
-	public classes(input?: StyleProps<this & T>): string {
+	private classes(input?: StyleProps<this>): string {
 		const acc = new Map();
-		
-		
-		if(input && "base" in input && !input.base){
+
+		if (input && "base" in input && !input.base) {
 			// not including base. Maybe do something here?
-		}else{
-			acc.set("base", clx(this.base))
+		} else {
+			acc.set("base", clx(this.base));
 		}
 
 		if (input) {
@@ -51,7 +73,7 @@ export class Clazzx<T extends Record<string, Clx> = Record<string, Clx>> {
 					key !== "classes" &&
 					value === true
 				) {
-					//@ts-ignore
+					//@ts-expect-error we're setting the value on the class dynamically
 					acc.set(key, clx(this[key]));
 				}
 			}
@@ -64,17 +86,23 @@ export class Clazzx<T extends Record<string, Clx> = Record<string, Clx>> {
 		// handle compounds
 		for (const [i, compound] of this.compounds.entries()) {
 			if (
-				compound.states.every(() => {
-					//@ts-ignore this is fine
-					if (key in this && input[key]) return true;
-				})
+				compound.states.every(
+					//@ts-expect-error this is fine
+					(key) => key in this && input && input[key]
+				)
 			) {
 				acc.set("compound" + i, clx(compound.classes));
 			}
 		}
-		return Array.from(acc.values()).join(" ").replace(/\B\s+|\s+\B/, "");
+
+		return clx(Array.from(acc.values()));
+	}
+
+	public static c<C extends Clazzx>(
+		this: new (...args: unknown[]) => C,
+		classes: StyleProps<C>
+	) {
+		const instance = new this();
+		return instance.classes(classes);
 	}
 }
-
-
-

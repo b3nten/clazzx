@@ -41,7 +41,7 @@ intent: isLoading ? "loading"
 # Installation
 ```ts 
 // Deno
-import { Clazzx, clx } from "https://deno.land/x/clazzx/mod.ts"
+import { ClazzX, clx } from "https://deno.land/x/clazzx/mod.ts"
 
 // NPM
 npm i clazzx
@@ -54,9 +54,9 @@ yarn add clazzx
 ## A basic component
 
 ```ts
-import { Clazzx } from 'clazzx'
+import { ClazzX } from 'clazzx'
 
-class Input extends Clazzx {
+class Input extends ClazzX {
 	// the base class will always be applied
 	base = "border rounded-md font-sans"
 
@@ -128,7 +128,10 @@ const b = clx("bg-red-300", false && "text-red-700")
 const c = clx(["p-4", false && "mt4"], "text-black", true && "font-bold")
 // "p-4 text-black font-bold"
 ```
-It can be imported or used as a static method on `Clazzx`.
+It can be imported or used as a static method on `ClazzX`.
+
+## Accessing fields
+Each ClazzX instance exposes a static `get()` method to access the fields and methods of the class.
 
 # Examples
 
@@ -136,7 +139,7 @@ It can be imported or used as a static method on `Clazzx`.
 ```ts
 import { Style, StyleProps } from "clazzx"
 
-class LinkStyles extends Clazzx {
+class LinkStyles extends ClazzX {
 	base: "font-link no-underline transition duration-200"
 
 	primary: "text-link hover:text-link-hover"
@@ -170,7 +173,7 @@ function App(){
 
 ## With Globals
 ```ts
-class GlobalStyles extends Clazzx {
+class GlobalStyles extends ClazzX {
 	padding = {
 		sm: "p-2",
 		md: "p-4",

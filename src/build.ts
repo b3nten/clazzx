@@ -14,7 +14,7 @@ await build({
     // package.json properties
     name: "clazzx",
     version: "1.0.0",
-    description: "ClazzX is a small typesafe utility library for composing HTML classes.",
+    description: "ClazzX is a small typesafe utility library for composing CSS classes.",
     license: "MIT",
     repository: {
       type: "git",

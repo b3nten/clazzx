@@ -1,2 +1,2 @@
-export { Clazzx, clx } from "./src/clazzx.ts";
+export { ClazzX, clx } from "./src/clazzx.ts";
 export type { StyleProps } from "./src/clazzx.ts";

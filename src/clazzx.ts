@@ -5,6 +5,21 @@ type Clx =
 	| null
 	| Array<string | boolean | undefined | null>;
 
+
+/**
+ * 
+ *clx accepts any number of strings, booleans, undefined, null, or arrays of those types and returns a string of all truthy values.
+ * @example
+ * ```
+ * clx("text-3xl font-bold") // "text-3xl font-bold"
+ * clx(["text-3xl", "font-bold"]) // "text-3xl font-bold"
+ * clx(["text-3xl", undefined, null]) // "text-3xl"
+ * clx("text-3xl", "font-bold") // "text-3xl font-bold"
+ * clx("text-3xl", undefined, null) // "text-3xl"
+ * clx(["text-3xl"], ["font-bold"]) // "text-3xl font-bold"
+ * ```
+ */
+
 export const clx = (...input: Array<Clx>): string => {
 	if (input.length === 1) {
 		if (Array.isArray(input[0])) {
@@ -30,21 +45,56 @@ export const clx = (...input: Array<Clx>): string => {
 	return str;
 };
 
+type OmitIntrinsic<T> = Omit<T, "classes" | "compounds" | "default">;
+
+/**
+ * StyleProps creates a type from a ClazzX class that is used to define the input to the `compose` method.
+ * @example
+ * ```
+ * class Btn extends ClazzX {
+ *  base = "text-3xl font-bold";
+ *  small = "text-sm";
+ * }
+ * 
+ * function Button({...props}: StyleProps<Btn>) {
+ *   return <button className={Btn.compose(props)} />;
+ * }
+ * ```
+ */
+
 export type StyleProps<T> = {
 	[K in keyof Partial<
-		Omit<Omit<Omit<T, "classes">, "compounds">, "default">
+		OmitIntrinsic<T>
 	>]: boolean;
 };
 
-type ClazzxProps =
-	| {
-			compounds?: Clazzx["compounds"];
-			base?: Clazzx["base"];
-			default?: Clazzx["default"];
-	  }
-	| Record<string, Clx>;
+/**
+ *Inherit ClazzX and define your own base, default, compounds, and classes. Compose them by calling the static `compose` method.
+ * Access the classes by calling the static `get` method.
+ * @example
+ * ```
+ * class Btn extends ClazzX {
+ *   base = "text-3xl font-bold";
+ *   small = "text-sm";
+ * }
+ * const classes = Btn.compose({ small: true });
+ * ```
+ * @example
+ * ```
+ * class Input extends Btn {
+ *   base = "text-3xl font-bold";
+ *   error = "text-red-500"
+ *   compounds = [{
+ *     states: ["small", "error"],	
+ *     classes: "hover:bg-red-200",
+ *   }]
+ * }
+ * const classes = Input.compose({ small: true, error: true });
+ * ```
+ * @docs https://github.com/B3nten/clazzx
+ */
 
-export class Clazzx {
+export class ClazzX {
 	public static clx = clx;
 
 	public base: Clx = []
@@ -55,7 +105,7 @@ export class Clazzx {
 		classes: Clx;
 	}> = [];
 
-	private classes(input?: StyleProps<this>): string {
+	public classes(input?: StyleProps<this>): string {
 		const acc = new Map();
 
 		if (input && "base" in input && !input.base) {
@@ -94,15 +144,20 @@ export class Clazzx {
 				acc.set("compound" + i, clx(compound.classes));
 			}
 		}
-
 		return clx(Array.from(acc.values()));
 	}
 
-	public static c<C extends Clazzx>(
+	public static compose<C extends ClazzX>(
 		this: new (...args: unknown[]) => C,
 		classes: StyleProps<C>
 	) {
 		const instance = new this();
 		return instance.classes(classes);
+	}
+	public static get<C extends ClazzX>(
+		this: new (...args: unknown[]) => C
+	) {
+		const instance = new this();
+		return instance
 	}
 }

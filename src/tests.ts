@@ -1,5 +1,5 @@
 import { assertEquals } from "https://deno.land/std@0.162.0/testing/asserts.ts";
-import { clx, Clazzx } from "../mod.ts";
+import { clx, ClazzX } from "../mod.ts";
 
 assertEquals(clx("text-3xl font-bold"), "text-3xl font-bold");
 assertEquals(clx(["text-3xl", "font-bold"]), "text-3xl font-bold");
@@ -9,12 +9,12 @@ assertEquals(clx("text-3xl", "font-bold"), "text-3xl font-bold");
 assertEquals(clx("text-3xl", undefined, null), "text-3xl");
 assertEquals(clx(["text-3xl"], ["font-bold"]), "text-3xl font-bold");
 
-class Btn extends Clazzx {
+class Btn extends ClazzX {
 	base = "text-3xl font-bold";
 	small = "text-sm";
 }
 
-console.log("btn", Btn.c({ }));
+console.log("btn", Btn.compose({ }));
 
 class Input extends Btn {
 	base = "text-3xl font-bold";
@@ -27,4 +27,4 @@ class Input extends Btn {
 	]
 }
 
-console.log("input", Input.c({ small: true, error: true }));
+console.log("input", Input.compose({ small: true, error: true }));

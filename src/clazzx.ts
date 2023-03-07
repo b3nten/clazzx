@@ -9,14 +9,10 @@ export const clx = (input: Clx) => {
 	return "";
 };
 
-//  export type StyleProps<T> = {
-// [K in keyof Partial<
-// 	Omit<Omit<Omit<T, "classes">, "compounds">, "default">>]: boolean;
-// };
-
-export type StyleProps<T> = {
-	[K in keyof Partial<T>]: boolean
-}
+ export type StyleProps<T> = {
+[K in keyof Partial<
+	Omit<Omit<Omit<T, "classes">, "compounds">, "default">>]: boolean;
+};
 
 export class Clazzx<T extends Record<string, Clx> = Record<string, Clx>> {
 	public static clx = clx;
@@ -30,6 +26,7 @@ export class Clazzx<T extends Record<string, Clx> = Record<string, Clx>> {
 	constructor(props?: T){
 		if(props){
 			for(const [key, val] of Object.entries(props)){
+				//@ts-expect-error this is fine
 				this[key] = val
 			}
 		}
@@ -67,8 +64,8 @@ export class Clazzx<T extends Record<string, Clx> = Record<string, Clx>> {
 		// handle compounds
 		for (const [i, compound] of this.compounds.entries()) {
 			if (
-				compound.states.every((state) => {
-					//@ts-ignore
+				compound.states.every(() => {
+					//@ts-ignore this is fine
 					if (key in this && input[key]) return true;
 				})
 			) {

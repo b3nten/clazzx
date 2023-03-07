@@ -12,7 +12,7 @@ className={myButton({size: "small", intent="primary"})}
 ```
 In comparison, ClazzX models combinations of styles based on state.
 ```ts
-className={MyButton.c({small: true, primary: true})}
+className={MyButton.compose({small: true, primary: true})}
 // AND
 <Button small primary />
 ```

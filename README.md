@@ -20,11 +20,11 @@ This simplifies the logic of tying the styling of a component to complex state. 
 
 ```ts
 className={
-	MyButton.compose({ 
-		primary: true,
-		loading: isLoading,
-		error: isError 
-	})
+   MyButton.compose({ 
+       primary: true,
+       loading: isLoading,
+       error: isError 
+   })
 }
 //AND
 <Button primary loading={isLoading} error={isError}>
@@ -32,11 +32,11 @@ className={
 // Versus the traditional variant approach
 
 className={
-	myButton({
-		intent: isLoading ? "loading" 
-			: isError ? "error" 
-			: "primary"
-	})
+   myButton({
+      intent: isLoading ? "loading" 
+      : isError ? "error" 
+      : "primary"
+   })
 }
 // AND
 <Button intent={isLoading ? "loading" : isError ? "error" : "primary"}>
@@ -61,28 +61,28 @@ yarn add clazzx
 import { ClazzX } from 'clazzx'
 
 class Input extends ClazzX {
-	// the base class will always be applied
-	base = "border rounded-md font-sans"
+   // the base class will always be applied
+   base = "border rounded-md font-sans"
 
-	small = "px-2 py-1 text-sm"
-	md = "px-3 py-2 text-base"
-	lg = "px-4 py-3 text-lg"
+   small = "px-2 py-1 text-sm"
+   md = "px-3 py-2 text-base"
+   lg = "px-4 py-3 text-lg"
 
-	// you can use both strings and string arrays freely
-	primary = [
-		"bg-primary",
-		"border-primary-dark",
-		"text-primary-content"
-	]
-	secondary = [
-		"bg-secondary",
-		"border-secondary-dark",
-		"text-secondary-content"
-	]
+   // you can use both strings and string arrays freely
+   primary = [
+      "bg-primary",
+      "border-primary-dark",
+      "text-primary-content"
+   ]
+   secondary = [
+      "bg-secondary",
+      "border-secondary-dark",
+      "text-secondary-content"
+   ]
 }
 
 function MyCustomComponent(){
-	return <input className={Input.compose({ md: true, secondary: true })}/>
+   return <input className={Input.compose({ md: true, secondary: true })}/>
 }
 ```
 ## Default Classes
@@ -94,8 +94,8 @@ default = [this.md, this.secondary, "hover:scale-105"]
 If you want to conditionally apply styles when two or more states are true, you can create compound states.
 ```ts
 compounds = [{
-	state: ["primary", "large"],
-	classes: "shadow-md"
+   state: ["primary", "large"],
+   classes: "shadow-md"
 }]
 ```
 
@@ -144,60 +144,56 @@ Each ClazzX instance exposes a static `get()` method to access the fields and me
 import { Style, StyleProps } from "clazzx"
 
 class LinkStyles extends ClazzX {
-	base: "font-link no-underline transition duration-200"
+   base: "font-link no-underline transition duration-200"
 
-	primary: "text-link hover:text-link-hover"
-	secondary: "text-secondary hover:text-secondary-hover"
-	active: "text-active hover:text-active-hover underline"
+   primary: "text-link hover:text-link-hover"
+   secondary: "text-secondary hover:text-secondary-hover"
+   active: "text-active hover:text-active-hover underline"
 
-	default = this.primary
+   default = this.primary
 }
 
 interface Link {
-	children: ReactNode 
-	props: StyleProps<LinkStyles> & HTMLAttributes<HTMLAnchorElement>
+   children: ReactNode 
+   props: StyleProps<LinkStyles> & HTMLAttributes<HTMLAnchorElement>
 }
 
 function Link({children, ...props}: Link){
-	return <a {...props} className={LinkStyles.compose({...props})}>{children}</a>
+   return <a {...props} className={LinkStyles.compose({...props})}>{children}</a>
 }
 
 function App(){
-	const router = useRouter()
-	// ...
-	return (
-		// ...
-		<Link href="/about" secondary active={router.isCurrentPage}>
-			My Link
-		</Link>
-		// ...
-	)
+   const router = useRouter()
+   return (
+      <Link href="/about" secondary active={router.isCurrentPage}>
+         My Link
+      </Link>
+   )
 }
 ```
 
 ## With Globals
 ```ts
 class GlobalStyles extends ClazzX {
-	padding = {
-		sm: "p-2",
-		md: "p-4",
-		lg: "p-6",
-		dynamic: (i: number) => {
-			`p-[${i*2}px]`
-		}
-	}
+   padding = {
+      sm: "p-2",
+      md: "p-4",
+      lg: "p-6",
+      dynamic: (i: number) => {
+         `p-[${i*2}px]`
+      }
+   }
 }
 
 class Input extends GlobalStyles {
-	sm = clx(this.padding.sm, "rounded-sm")
-	md = clx(this.padding.md, "rounded-md")
-	lg = clx(this.padding.lg, "rounded-lg")
+   sm = clx(this.padding.sm, "rounded-sm")
+   md = clx(this.padding.md, "rounded-md")
+   lg = clx(this.padding.lg, "rounded-lg")
 
-	warning = "outline-red"
-
-	compounds = [{
-		state: ["sm", "warning"],
-		classes: this.padding.dynamic(8)
-	}]
+   warning = "outline-red"
+   compounds = [{
+      state: ["sm", "warning"],
+      classes: this.padding.dynamic(8)
+   }]
 }
 ```

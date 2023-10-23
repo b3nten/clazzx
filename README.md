@@ -1,4 +1,4 @@
-![clazzx](/.github/clazzx.png)
+![clazzx](/.github/banner.jpg)
 
 # Introduction
 

@@ -1,6 +1,20 @@
-![clazzx](/.github/banner.jpg)
+<div align="center">
+<br />
 
-# Introduction
+![Clazzx](.github/banner.jpg)
+
+<h3>CLazzx 💄</h3>
+
+#### A typesafe utility library for composing HTML classes
+
+[![Npm package yearly downloads](https://badgen.net/npm/dy/express)](https://npmjs.com/package/express)
+[![GitHub stars](https://img.shields.io/github/stars/freeCodeCamp/freeCodeCamp.svg?style=social&label=Star&maxAge=2592000)](https://github.com/freeCodeCamp/freeCodeCamp)
+[![NuGet stable version](https://badgen.net/nuget/v/newtonsoft.json)](https://nuget.org/packages/newtonsoft.json)
+
+*ClazzX is a small typesafe utility library for composing HTML classes using state rather than variants.*
+</div>
+
+### Introduction
 
 ClazzX is a small typesafe utility library for composing HTML classes. Unlike Vanilla Extract, Stitches, or CVA (all fantastic options) ClazzX takes a different approach, using *state* rather than *variants* to compose styles.
 
@@ -42,7 +56,7 @@ className={
 <Button intent={isLoading ? "loading" : isError ? "error" : "primary"}>
 ```
 
-# Installation
+### Installation
 ```ts 
 // Deno
 import { ClazzX, clx } from "https://deno.land/x/clazzx/mod.ts"
@@ -53,9 +67,9 @@ npm i clazzx
 // Yarn
 yarn add clazzx
 ```
-# Getting Started
+### Getting Started
 
-## A basic component
+#### A basic component
 
 ```ts
 import { ClazzX } from 'clazzx'
@@ -85,12 +99,12 @@ function MyCustomComponent(){
    return <input className={Input.compose({ md: true, secondary: true })}/>
 }
 ```
-## Default Classes
+#### Default Classes
 You can set default classes that are applied if nothing is passed to the classes method.
 ```ts
 default = [this.md, this.secondary, "hover:scale-105"]
 ```
-## Compounds
+#### Compounds
 If you want to conditionally apply styles when two or more states are true, you can create compound states.
 ```ts
 compounds = [{
@@ -99,7 +113,7 @@ compounds = [{
 }]
 ```
 
-## Ordering
+#### Ordering
 Classes are applied in the order of the states.
 ```ts
 className={btn.compose({rounded: true, square: true})}
@@ -112,13 +126,13 @@ The order of classes works like this:
 3. ...order based on state `||` default classes
 4. Compounds
 
-## StyleProps
+#### StyleProps
 StyleProps is an exported type that gives you access to the parameters of the style class. You can use this to strongly type components.
 ```ts
 function MyButton({...props}: StyleProps<MyStyleClass>){}
 ```
 
-## Clx
+#### Clx
 
 `clx` is a variadic utility function that composes a string based on it's truthy inputs. 
 
@@ -134,12 +148,12 @@ const c = clx(["p-4", false && "mt4"], "text-black", true && "font-bold")
 ```
 It can be imported or used as a static method on `ClazzX`.
 
-## Accessing fields
+#### Accessing fields
 Each ClazzX instance exposes a static `get()` method to access the fields and methods of the class.
 
-# Examples
+### Examples
 
-## React Link
+#### React Link
 ```ts
 import { Style, StyleProps } from "clazzx"
 
@@ -172,7 +186,7 @@ function App(){
 }
 ```
 
-## With Globals
+#### With Globals
 ```ts
 class GlobalStyles extends ClazzX {
    padding = {
